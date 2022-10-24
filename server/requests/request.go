@@ -1,6 +1,6 @@
 package requests
 
-import "github.com/zxdstyle/liey/pkg/server/helper/ua"
+import "github.com/zxdstyle/icarus/server/helper/ua"
 
 type Request interface {
 	GetResourceID() uint

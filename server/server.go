@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/zxdstyle/liey/pkg/server/engines"
-	"github.com/zxdstyle/liey/pkg/server/handler"
-	"github.com/zxdstyle/liey/pkg/server/options"
-	"github.com/zxdstyle/liey/pkg/server/router"
+	"github.com/zxdstyle/icarus/server/engines"
+	"github.com/zxdstyle/icarus/server/handler"
+	"github.com/zxdstyle/icarus/server/options"
+	"github.com/zxdstyle/icarus/server/router"
 )
 
 type Server struct {

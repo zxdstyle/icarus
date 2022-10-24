@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/zxdstyle/liey/pkg/helpers"
+	"github.com/zxdstyle/icarus/helpers"
 	"gorm.io/gorm"
 	"strings"
 )

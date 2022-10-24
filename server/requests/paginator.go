@@ -1,7 +1,7 @@
 package requests
 
 import (
-	"github.com/zxdstyle/liey/pkg/server/responses"
+	"github.com/zxdstyle/icarus/server/responses"
 	"gorm.io/gorm"
 )
 

@@ -1,12 +1,11 @@
 package fiber
 
 import (
-	"github.com/gofiber/fiber/v2"
 	json "github.com/json-iterator/go"
-	"github.com/zxdstyle/liey/pkg/server/engines"
-	"github.com/zxdstyle/liey/pkg/server/handler"
-	"github.com/zxdstyle/liey/pkg/server/helper"
-	"github.com/zxdstyle/liey/pkg/server/router"
+	"github.com/zxdstyle/icarus/server/engines"
+	"github.com/zxdstyle/icarus/server/handler"
+	"github.com/zxdstyle/icarus/server/helper"
+	"github.com/zxdstyle/icarus/server/router"
 )
 
 type Fiber struct {

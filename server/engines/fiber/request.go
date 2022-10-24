@@ -2,11 +2,9 @@ package fiber
 
 import (
 	"errors"
-	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/cast"
-	"github.com/zxdstyle/liey/pkg/server/helper/ua"
-	"github.com/zxdstyle/liey/pkg/server/requests"
+	"github.com/zxdstyle/icarus/server/helper/ua"
+	"github.com/zxdstyle/icarus/server/requests"
 	"sync"
 )
 

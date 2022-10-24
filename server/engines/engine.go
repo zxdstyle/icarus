@@ -1,8 +1,7 @@
 package engines
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/zxdstyle/liey/pkg/server/router"
+	"github.com/zxdstyle/icarus/server/router"
 )
 
 type Engine interface {

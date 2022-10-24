@@ -1,7 +1,7 @@
 package events
 
 import (
-	"github.com/zxdstyle/liey/pkg/co"
+	"github.com/zxdstyle/icarus/co"
 	"sync"
 )
 

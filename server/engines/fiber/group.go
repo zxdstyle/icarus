@@ -1,10 +1,9 @@
 package fiber
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/zxdstyle/liey/pkg/server/handler"
-	"github.com/zxdstyle/liey/pkg/server/helper"
-	"github.com/zxdstyle/liey/pkg/server/router"
+	"github.com/zxdstyle/icarus/server/handler"
+	"github.com/zxdstyle/icarus/server/helper"
+	"github.com/zxdstyle/icarus/server/router"
 )
 
 type Group struct {

@@ -1,8 +1,7 @@
 package router
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/zxdstyle/liey/pkg/server/handler"
+	"github.com/zxdstyle/icarus/server/handler"
 )
 
 type Router interface {
