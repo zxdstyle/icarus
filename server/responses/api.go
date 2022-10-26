@@ -1,7 +1,6 @@
 package responses
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
 
@@ -39,8 +38,8 @@ func (r *ApiResponse) StatusCode() int {
 	return r.Status
 }
 
-func (r *ApiResponse) Response(ctx *fiber.Ctx) error {
-	return ctx.JSON(r)
+func (r *ApiResponse) Content() any {
+	return r
 }
 
 func Success(data any) *ApiResponse {
@@ -51,10 +50,10 @@ func Success(data any) *ApiResponse {
 	}
 }
 
-func Failed(err string) *ApiResponse {
+func Failed(msg string) *ApiResponse {
 	return &ApiResponse{
 		Status:  http.StatusBadRequest,
-		Message: err,
+		Message: msg,
 		Data:    nil,
 	}
 }
@@ -75,10 +74,31 @@ func Unauthorized(err error) *ApiResponse {
 	}
 }
 
-func Internal(err string) *ApiResponse {
+func Internal(msg string) *ApiResponse {
 	return &ApiResponse{
 		Status:  http.StatusInternalServerError,
-		Message: err,
+		Message: msg,
 		Data:    nil,
+	}
+}
+
+func NotFound(msg ...string) *ApiResponse {
+	message := http.StatusText(http.StatusNotFound)
+	if len(msg) > 0 {
+		message = msg[1]
+	}
+
+	return &ApiResponse{
+		Status:  http.StatusNotFound,
+		Message: message,
+		Data:    nil,
+	}
+}
+
+func Custom(statusCode int, msg string, data interface{}) *ApiResponse {
+	return &ApiResponse{
+		Status:  statusCode,
+		Message: msg,
+		Data:    data,
 	}
 }

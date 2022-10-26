@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/zxdstyle/icarus/server/engines"
 	"github.com/zxdstyle/icarus/server/handler"
+	"github.com/zxdstyle/icarus/server/middlewares"
 	"github.com/zxdstyle/icarus/server/options"
 	"github.com/zxdstyle/icarus/server/router"
 )
@@ -48,7 +48,7 @@ func (s *Server) RESOURCE(path string, handler handler.ResourceHandler) router.R
 	return s.engine.RESOURCE(path, handler)
 }
 
-func (s *Server) Use(funcHandler fiber.Handler) router.Router {
+func (s *Server) Use(funcHandler middlewares.FuncMiddleware) router.Router {
 	return s.engine.Use(funcHandler)
 }
 

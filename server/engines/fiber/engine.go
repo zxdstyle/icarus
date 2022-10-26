@@ -1,10 +1,13 @@
 package fiber
 
 import (
+	"github.com/gofiber/fiber/v2"
 	json "github.com/json-iterator/go"
 	"github.com/zxdstyle/icarus/server/engines"
 	"github.com/zxdstyle/icarus/server/handler"
 	"github.com/zxdstyle/icarus/server/helper"
+	"github.com/zxdstyle/icarus/server/middlewares"
+	"github.com/zxdstyle/icarus/server/responses"
 	"github.com/zxdstyle/icarus/server/router"
 )
 
@@ -58,8 +61,8 @@ func (f *Fiber) RESOURCE(resource string, handler handler.ResourceHandler) route
 		DELETE(helper.GetResourceUriDestroy(resource, base), handler.Destroy)
 }
 
-func (f *Fiber) Use(funcHandler fiber.Handler) router.Router {
-	f.app.Use(funcHandler)
+func (f *Fiber) Use(funcHandler middlewares.FuncMiddleware) router.Router {
+	f.app.Use(wrapMiddleware(funcHandler))
 	return f
 }
 
@@ -71,13 +74,31 @@ func (f *Fiber) Shutdown() error {
 	return f.app.Shutdown()
 }
 
+func wrapMiddleware(middleware middlewares.FuncMiddleware) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		resp := middleware(ctx.Context(), newRequest(ctx))
+		return parseResponse(ctx, resp)
+	}
+}
+
 func wrapHandler(handler handler.FuncHandler) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		resp := handler(ctx.Context(), newRequest(ctx))
-		if resp == nil {
-			return nil
-		}
 		ctx.Status(resp.StatusCode())
-		return resp.Response(ctx)
+		return parseResponse(ctx, resp)
 	}
+}
+
+func parseResponse(ctx *fiber.Ctx, resp responses.Response) error {
+	if resp == nil {
+		return nil
+	}
+
+	switch resp.(type) {
+	case *responses.ApiResponse:
+		return ctx.JSON(resp.Content())
+	case *responses.RedirectResp:
+		return ctx.Redirect(resp.Content().(string), resp.StatusCode())
+	}
+	return nil
 }

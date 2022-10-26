@@ -3,6 +3,7 @@ package base
 import (
 	"context"
 	"fmt"
+	"github.com/gookit/goutil/strutil"
 	"github.com/iancoleman/strcase"
 	"github.com/spf13/cast"
 	"github.com/zxdstyle/icarus/server/requests"
@@ -124,6 +125,12 @@ func (g GormRepository[M, F, O]) doSorter(tx *gorm.DB, sorter O) *gorm.DB {
 	v := reflect.ValueOf(sorter)
 	for i := 0; i < t.NumField(); i++ {
 		name := t.Field(i).Tag.Get("query")
+		if len(name) == 0 {
+			name = t.Field(i).Tag.Get("json")
+		}
+		if len(name) == 0 {
+			name = strutil.SnakeCase(t.Field(i).Name)
+		}
 		value := v.Field(i).Interface()
 		val := strings.ToUpper(cast.ToString(value))
 		if len(val) == 0 || len(name) == 0 {

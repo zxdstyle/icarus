@@ -1,8 +1,8 @@
-package fiber
+package gin
 
 import (
 	"errors"
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/cast"
 	"github.com/zxdstyle/icarus/server/helper/ua"
 	"github.com/zxdstyle/icarus/validator"
@@ -18,36 +18,39 @@ const (
 )
 
 type request struct {
-	ctx   *fiber.Ctx
+	ctx   *gin.Context
 	agent *ua.UserAgent
 	once  sync.Once
 }
 
-func newRequest(ctx *fiber.Ctx) *request {
+func newRequest(ctx *gin.Context) *request {
 	return &request{
 		ctx: ctx,
 	}
 }
 
 func (r *request) GetResourceID() (id uint) {
-	params := r.ctx.Route().Params
-	if len(params) == 0 {
-		return
-	}
 
-	return cast.ToUint(r.ctx.Params(params[0]))
+	return cast.ToUint(r.ctx.Param("id"))
 }
 
 func (r *request) GetRouteParam(field string) string {
-	return r.ctx.Params(field)
+	return r.ctx.Param(field)
 }
 
 func (r *request) GetQuery(key string, def ...string) string {
-	return r.ctx.Query(key, def...)
+	val := r.ctx.Query(key)
+	if len(val) > 0 {
+		return val
+	}
+	if len(def) > 0 {
+		return def[0]
+	}
+	return val
 }
 
 func (r *request) ScanQueries(pointer any) error {
-	if err := r.ctx.QueryParser(pointer); err != nil {
+	if err := r.ctx.BindQuery(pointer); err != nil {
 		return err
 	}
 	if err := validator.Validate(pointer); err != nil {
@@ -57,7 +60,7 @@ func (r *request) ScanQueries(pointer any) error {
 }
 
 func (r *request) Bind(pointer any) error {
-	return r.ctx.BodyParser(pointer)
+	return r.ctx.BindJSON(pointer)
 }
 
 func (r *request) Validate(pointer any) error {
@@ -71,26 +74,26 @@ func (r *request) Validate(pointer any) error {
 }
 
 func (r *request) ScanHeaders(pointer any) error {
-	return r.ctx.ReqHeaderParser(pointer)
+	return r.ctx.BindHeader(pointer)
 }
 
 func (r *request) IP() string {
-	return r.ctx.IP()
+	return r.ctx.RemoteIP()
 }
 
 func (r *request) UserAgent() *ua.UserAgent {
 	r.once.Do(func() {
-		headers := r.ctx.GetReqHeaders()
-		r.agent = ua.New(headers[UserAgentKey])
+		r.agent = ua.New(r.ctx.GetHeader(UserAgentKey))
 	})
 
 	return r.agent
 }
 
 func (r *request) Next() error {
-	return r.ctx.Next()
+	r.ctx.Next()
+	return nil
 }
 
 func (r *request) SetHeader(key, value string) {
-	r.ctx.Set(key, value)
+	r.ctx.Header(key, value)
 }

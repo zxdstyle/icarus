@@ -1,7 +1,7 @@
-package fiber
+package gin
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/zxdstyle/icarus/server/handler"
 	"github.com/zxdstyle/icarus/server/helper"
 	"github.com/zxdstyle/icarus/server/middlewares"
@@ -9,7 +9,7 @@ import (
 )
 
 type Group struct {
-	group fiber.Router
+	group *gin.RouterGroup
 }
 
 func (g Group) Group(prefix string) router.Router {
@@ -17,22 +17,22 @@ func (g Group) Group(prefix string) router.Router {
 }
 
 func (g Group) GET(path string, handler handler.FuncHandler) router.Router {
-	g.group.Get(path, wrapHandler(handler))
+	g.group.GET(path, wrapHandler(handler))
 	return g
 }
 
 func (g Group) POST(path string, handler handler.FuncHandler) router.Router {
-	g.group.Post(path, wrapHandler(handler))
+	g.group.POST(path, wrapHandler(handler))
 	return g
 }
 
 func (g Group) PUT(path string, handler handler.FuncHandler) router.Router {
-	g.group.Put(path, wrapHandler(handler))
+	g.group.PUT(path, wrapHandler(handler))
 	return g
 }
 
 func (g Group) DELETE(path string, handler handler.FuncHandler) router.Router {
-	g.group.Delete(path, wrapHandler(handler))
+	g.group.DELETE(path, wrapHandler(handler))
 	return g
 }
 

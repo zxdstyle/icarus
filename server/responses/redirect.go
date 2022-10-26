@@ -1,25 +1,24 @@
 package responses
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"net/http"
 )
 
-type redirect struct {
+type RedirectResp struct {
 	Status int
 	Path   string
 }
 
-func (r *redirect) StatusCode() int {
+func (r *RedirectResp) StatusCode() int {
 	return r.Status
 }
 
-func (r *redirect) Response(ctx *fiber.Ctx) error {
-	return ctx.Redirect(r.Path, r.Status)
+func (r *RedirectResp) Content() any {
+	return r.Path
 }
 
 func Redirect(path string, status int) Response {
-	return &redirect{
+	return &RedirectResp{
 		Status: http.StatusFound,
 		Path:   path,
 	}

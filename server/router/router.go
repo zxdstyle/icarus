@@ -2,11 +2,12 @@ package router
 
 import (
 	"github.com/zxdstyle/icarus/server/handler"
+	"github.com/zxdstyle/icarus/server/middlewares"
 )
 
 type Router interface {
 	Group(prefix string) Router
-	Use(fiber.Handler) Router
+	Use(handler middlewares.FuncMiddleware) Router
 	GET(path string, handler handler.FuncHandler) Router
 	POST(path string, handler handler.FuncHandler) Router
 	PUT(path string, handler handler.FuncHandler) Router

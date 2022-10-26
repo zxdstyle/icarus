@@ -9,9 +9,8 @@ type Request interface {
 	ScanQueries(pointer any) error
 	Validate(pointer any) error
 	Bind(pointer any) error
-	Redirect(path string, status int)
-	Headers() map[string]string
 	ScanHeaders(pointer any) error
 	IP() string
 	UserAgent() *ua.UserAgent
+	SetHeader(key, value string)
 }
