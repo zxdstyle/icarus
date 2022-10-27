@@ -13,4 +13,7 @@ type Request interface {
 	IP() string
 	UserAgent() *ua.UserAgent
 	SetHeader(key, value string)
+	GetHeader(key string) string
+	Value(key string) any
+	Context(key string, value any)
 }

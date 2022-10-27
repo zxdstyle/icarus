@@ -97,3 +97,15 @@ func (r *request) Next() error {
 func (r *request) SetHeader(key, value string) {
 	r.ctx.Header(key, value)
 }
+
+func (r *request) GetHeader(key string) string {
+	return r.ctx.GetHeader(key)
+}
+
+func (r *request) Value(key string) any {
+	return r.ctx.Value(key)
+}
+
+func (r *request) Context(key string, value any) {
+	r.ctx.Set(key, value)
+}

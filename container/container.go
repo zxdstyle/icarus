@@ -12,6 +12,14 @@ func Provide[T any](injector *do.Injector, provider Provider[T]) {
 	do.Provide(injector, wrapProvider(provider))
 }
 
+func ProvideValue[T any](injector *do.Injector, value T) {
+	do.ProvideValue(injector, value)
+}
+
+func ProvideNamedValue[T any](injector *do.Injector, name string, value T) {
+	do.ProvideNamedValue(injector, name, value)
+}
+
 func ProvideNamed[T any](injector *do.Injector, name string, provider Provider[T]) {
 	do.ProvideNamed(injector, name, wrapProvider(provider))
 }
