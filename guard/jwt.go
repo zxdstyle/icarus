@@ -63,3 +63,7 @@ func (j Jwt) LoginUsingID(id uint) (any, error) {
 	claims["exp"] = time.Now().Add(j.expire).Unix()
 	return token.SignedString(j.secret)
 }
+
+func (j Jwt) ID(req requests.Request) uint {
+	return cast.ToUint(req.Value(jwtGuardContextKey))
+}

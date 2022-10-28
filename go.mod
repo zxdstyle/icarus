@@ -9,6 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gofiber/fiber/v2 v2.39.0
+	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/golang-module/carbon/v2 v2.1.9
 	github.com/gookit/config/v2 v2.1.7
 	github.com/gookit/goutil v0.5.15
@@ -18,6 +19,7 @@ require (
 	github.com/mssola/user_agent v0.5.3
 	github.com/samber/do v1.4.1
 	github.com/spf13/cast v1.5.0
+	github.com/spf13/cobra v1.6.1
 	golang.org/x/crypto v0.1.0
 	gorm.io/driver/mysql v1.4.3
 	gorm.io/gorm v1.24.0
@@ -32,6 +34,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
@@ -43,6 +46,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.40.0 // indirect
