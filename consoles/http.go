@@ -1,4 +1,4 @@
-package providers
+package consoles
 
 import (
 	"github.com/zxdstyle/icarus"
