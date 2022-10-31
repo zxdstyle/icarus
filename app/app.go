@@ -29,7 +29,7 @@ func (a *Application) Run() error {
 
 	a.kernel.Boot(providers)
 
-	return initConsole().Execute()
+	return a.rootCmd.Execute()
 }
 
 func (a *Application) RegisterConsole(cmds ...consoles.Console) {
@@ -40,7 +40,8 @@ func (a *Application) RegisterConsole(cmds ...consoles.Console) {
 
 func (a *Application) transferConsole(cmd consoles.Console) *cobra.Command {
 	return &cobra.Command{
-		Use: cmd.Signature(),
+		Use:   cmd.Signature(),
+		Short: cmd.Description(),
 		Run: func(c *cobra.Command, args []string) {
 			if err := cmd.Handle(); err != nil {
 			}
