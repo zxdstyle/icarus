@@ -16,4 +16,5 @@ type Request interface {
 	GetHeader(key string) string
 	Value(key string) any
 	Context(key string, value any)
+	Method() string
 }

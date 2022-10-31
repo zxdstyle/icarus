@@ -109,3 +109,7 @@ func (r *request) Value(key string) any {
 func (r *request) Context(key string, value any) {
 	r.ctx.Set(key, value)
 }
+
+func (r *request) Method() string {
+	return r.ctx.Request.Method
+}

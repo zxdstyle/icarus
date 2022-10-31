@@ -84,7 +84,6 @@ func wrapMiddleware(middleware middlewares.FuncMiddleware) fiber.Handler {
 func wrapHandler(handler handler.FuncHandler) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		resp := handler(ctx.Context(), newRequest(ctx))
-		ctx.Status(resp.StatusCode())
 		return parseResponse(ctx, resp)
 	}
 }
@@ -94,6 +93,7 @@ func parseResponse(ctx *fiber.Ctx, resp responses.Response) error {
 		return nil
 	}
 
+	ctx.Status(resp.StatusCode())
 	switch resp.(type) {
 	case *responses.ApiResponse:
 		return ctx.JSON(resp.Content())

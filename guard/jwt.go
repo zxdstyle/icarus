@@ -6,10 +6,11 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/spf13/cast"
 	"github.com/zxdstyle/icarus/server/requests"
+	"strings"
 	"time"
 )
 
-type Jwt struct {
+type jwtGuard struct {
 	secret []byte
 	expire time.Duration
 }
@@ -23,15 +24,16 @@ var (
 	ErrMissingToken = errors.New("missing or malformed JWT")
 )
 
-func NewJwtGuard(secret []byte, expire time.Duration) *Jwt {
-	return &Jwt{
+func NewJwtGuard(secret []byte, expire time.Duration) Guard {
+	return &jwtGuard{
 		secret: secret,
 		expire: expire,
 	}
 }
 
-func (j Jwt) Check(req requests.Request) error {
+func (j jwtGuard) Check(req requests.Request) error {
 	token := req.GetHeader(HeaderAuthorization)
+	token = strings.Replace(token, "Bearer ", "", 1)
 	if len(token) == 0 {
 		return ErrMissingToken
 	}
@@ -56,7 +58,7 @@ func (j Jwt) Check(req requests.Request) error {
 	return nil
 }
 
-func (j Jwt) LoginUsingID(id uint) (any, error) {
+func (j jwtGuard) LoginUsingID(id uint) (any, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["user_id"] = id
@@ -64,6 +66,6 @@ func (j Jwt) LoginUsingID(id uint) (any, error) {
 	return token.SignedString(j.secret)
 }
 
-func (j Jwt) ID(req requests.Request) uint {
+func (j jwtGuard) ID(req requests.Request) uint {
 	return cast.ToUint(req.Value(jwtGuardContextKey))
 }

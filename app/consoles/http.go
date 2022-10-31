@@ -1,6 +1,7 @@
-package providers
+package consoles
 
 import (
+	"fmt"
 	"github.com/zxdstyle/icarus"
 	"os"
 	"os/signal"
@@ -24,6 +25,8 @@ func (p HttpProvider) Handle() error {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	<-sc
+
+	fmt.Println("received")
 
 	icarus.Server().Shutdown()
 

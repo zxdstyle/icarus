@@ -94,13 +94,17 @@ func wrapHandler(handler handler.FuncHandler) gin.HandlerFunc {
 		if resp == nil {
 			return
 		}
-		c.Status(resp.StatusCode())
 		parseResponse(c, resp)
 		return
 	}
 }
 
 func parseResponse(ctx *gin.Context, resp responses.Response) {
+	if resp == nil {
+		return
+	}
+
+	ctx.Status(resp.StatusCode())
 	switch resp.(type) {
 	case *responses.ApiResponse:
 		ctx.JSON(resp.StatusCode(), resp.Content())

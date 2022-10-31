@@ -102,3 +102,11 @@ func Custom(statusCode int, msg string, data interface{}) *ApiResponse {
 		Data:    data,
 	}
 }
+
+func Empty() *ApiResponse {
+	return &ApiResponse{
+		Status:  http.StatusNoContent,
+		Message: http.StatusText(http.StatusNoContent),
+		Data:    nil,
+	}
+}
