@@ -94,6 +94,7 @@ func wrapHandler(handler handler.FuncHandler) gin.HandlerFunc {
 		if resp == nil {
 			return
 		}
+
 		parseResponse(c, resp)
 		return
 	}

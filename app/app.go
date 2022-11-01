@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/spf13/cobra"
 	"github.com/zxdstyle/icarus/consoles"
+	"log"
 )
 
 type Application struct {
@@ -23,7 +24,10 @@ func New(kernel *Kernel) *Application {
 }
 
 func (a *Application) Run() error {
-	a.RegisterConsole(a.kernel.Consoles...)
+	// 注册自定义命令
+	if a.kernel.Consoles != nil {
+		a.RegisterConsole(a.kernel.Consoles...)
+	}
 
 	a.RegisterConsole(consoles.HttpProvider{})
 
@@ -32,8 +36,8 @@ func (a *Application) Run() error {
 	return a.rootCmd.Execute()
 }
 
-func (a *Application) RegisterConsole(cmds ...consoles.Console) {
-	for _, cmd := range cmds {
+func (a *Application) RegisterConsole(commands ...consoles.Console) {
+	for _, cmd := range commands {
 		a.rootCmd.AddCommand(a.transferConsole(cmd))
 	}
 }
@@ -44,6 +48,7 @@ func (a *Application) transferConsole(cmd consoles.Console) *cobra.Command {
 		Short: cmd.Description(),
 		Run: func(c *cobra.Command, args []string) {
 			if err := cmd.Handle(); err != nil {
+				log.Fatalln(err)
 			}
 		},
 	}
