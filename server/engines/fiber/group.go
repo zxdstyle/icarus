@@ -49,3 +49,8 @@ func (g Group) Use(handler middlewares.FuncMiddleware) router.Router {
 	g.group.Use(wrapMiddleware(handler))
 	return g
 }
+
+func (g Group) Static(prefix, root string) router.Router {
+	g.group.Static(prefix, root)
+	return g
+}

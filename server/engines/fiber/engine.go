@@ -66,6 +66,11 @@ func (f *Fiber) Use(funcHandler middlewares.FuncMiddleware) router.Router {
 	return f
 }
 
+func (f *Fiber) Static(prefix, root string) router.Router {
+	f.app.Static(prefix, root)
+	return f
+}
+
 func (f *Fiber) ListenAndServe(address string) error {
 	return f.app.Listen(address)
 }

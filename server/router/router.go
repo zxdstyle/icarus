@@ -13,4 +13,5 @@ type Router interface {
 	PUT(path string, handler handler.FuncHandler) Router
 	DELETE(path string, handler handler.FuncHandler) Router
 	RESOURCE(resource string, handler handler.ResourceHandler) Router
+	Static(prefix, root string) Router
 }

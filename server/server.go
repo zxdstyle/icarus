@@ -52,6 +52,10 @@ func (s *Server) Use(funcHandler middlewares.FuncMiddleware) router.Router {
 	return s.engine.Use(funcHandler)
 }
 
+func (s *Server) Static(prefix, root string) router.Router {
+	return s.engine.Static(prefix, root)
+}
+
 func (s *Server) Run() error {
 	return s.engine.ListenAndServe(s.option.Addr)
 }

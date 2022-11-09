@@ -1,5 +1,7 @@
 package options
 
+import "github.com/gookit/config/v2"
+
 type Option struct {
 	Name string
 	Addr string
@@ -7,6 +9,6 @@ type Option struct {
 
 func Default() Option {
 	return Option{
-		Addr: ":8080",
+		Addr: config.String("app.addr", ":8080"),
 	}
 }
