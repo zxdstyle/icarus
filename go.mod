@@ -17,6 +17,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0
 	github.com/json-iterator/go v1.1.12
 	github.com/mssola/user_agent v0.5.3
+	github.com/robfig/cron/v3 v3.0.0
 	github.com/samber/do v1.4.1
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.6.1

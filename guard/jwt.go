@@ -37,6 +37,8 @@ func (j jwtGuard) Check(req requests.Request) error {
 	if len(token) == 0 {
 		return ErrMissingToken
 	}
+	token = strings.Replace(token, "Bearer ", "", 1)
+
 	t, e := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		// Check the signing method
 		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {

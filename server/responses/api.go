@@ -107,6 +107,5 @@ func Empty() *ApiResponse {
 	return &ApiResponse{
 		Status:  http.StatusNoContent,
 		Message: http.StatusText(http.StatusNoContent),
-		Data:    nil,
 	}
 }

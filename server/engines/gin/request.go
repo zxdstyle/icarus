@@ -113,3 +113,7 @@ func (r *request) Context(key string, value any) {
 func (r *request) Method() string {
 	return r.ctx.Request.Method
 }
+
+func (r *request) Method() string {
+	return r.ctx.Request.Method
+}

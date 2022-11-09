@@ -2,6 +2,7 @@ package icarus
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/golang-module/carbon/v2"
 	"github.com/gookit/config/v2"
@@ -24,6 +25,7 @@ var (
 func init() {
 	config.AddDriver(yamlv3.Driver)
 	if err := config.LoadFiles("config.yaml"); err != nil {
+		fmt.Println(err.Error())
 		//panic(err)
 	}
 
