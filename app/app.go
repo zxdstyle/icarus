@@ -3,6 +3,8 @@ package app
 import (
 	"github.com/spf13/cobra"
 	"github.com/zxdstyle/icarus/consoles"
+	"github.com/zxdstyle/icarus/container"
+	"github.com/zxdstyle/icarus/schedulers"
 	"log"
 )
 
@@ -29,16 +31,26 @@ func (a *Application) Run() error {
 		a.RegisterConsole(a.kernel.Consoles...)
 	}
 
-	a.RegisterConsole(consoles.HttpProvider{})
+	// 注册scheduler驱动
+	container.ProvideValue[schedulers.Scheduler](providers, schedulers.NewCron())
 
-	a.kernel.Boot(providers)
+	a.RegisterConsole(consoles.HttpProvider{}, consoles.NewSchedulerProvider(Make[schedulers.Scheduler]()))
+
+	if a.kernel.Boot != nil {
+		a.kernel.Boot(providers)
+	}
+
+	if a.kernel.Schedule != nil {
+		cron := Make[schedulers.Scheduler]()
+		a.kernel.Schedule(cron)
+	}
 
 	return a.rootCmd.Execute()
 }
 
 func (a *Application) RegisterConsole(commands ...consoles.Console) {
-	for _, cmd := range commands {
-		a.rootCmd.AddCommand(a.transferConsole(cmd))
+	for idx, _ := range commands {
+		a.rootCmd.AddCommand(a.transferConsole(commands[idx]))
 	}
 }
 

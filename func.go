@@ -2,7 +2,9 @@ package icarus
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/golang-module/carbon/v2"
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/yamlv3"
 	"github.com/zxdstyle/icarus/container"
@@ -17,12 +19,14 @@ import (
 var (
 	providers       = container.New()
 	defaultEventBus = events.NewBus()
+	Carbon          carbon.Carbon
 )
 
 func init() {
 	config.AddDriver(yamlv3.Driver)
 	if err := config.LoadFiles("config.yaml"); err != nil {
-		panic(err)
+		fmt.Println(err.Error())
+		//panic(err)
 	}
 
 	container.Provide(providers, fiber.NewFiber)
@@ -47,6 +51,10 @@ func init() {
 		}
 		return database.NewRedis(&cfg), nil
 	})
+
+	zh := carbon.NewLanguage()
+	zh.SetLocale("zh-CN")
+	Carbon = carbon.SetLanguage(zh)
 }
 
 func Server() *server.Server {
