@@ -48,7 +48,14 @@ func (h Handler[V]) Create(ctx context.Context, req requests.Request) responses.
 }
 
 func (h Handler[V]) Update(ctx context.Context, req requests.Request) responses.Response {
-	panic("implement me")
+	var data V
+	if err := req.Bind(&data); err != nil {
+		return responses.Error(err)
+	}
+	if err := h.logic.Update(ctx, req.GetResourceID(), &data); err != nil {
+		return responses.Error(err)
+	}
+	return responses.Success(data)
 }
 
 func (h Handler[V]) Destroy(ctx context.Context, req requests.Request) responses.Response {

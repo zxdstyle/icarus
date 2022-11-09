@@ -3,8 +3,6 @@ package base
 import (
 	"errors"
 	"github.com/golang-module/carbon/v2"
-	"hash/crc32"
-	"math"
 )
 
 var ErrorModelTypeNotCorrect = errors.New("model is not correct,check your code")
@@ -80,9 +78,4 @@ func (m *CreateOnlyModel) SetUpdatedAt(updatedAt *carbon.Carbon) {
 
 func (m *CreateOnlyModel) GetUpdatedAt() *carbon.Carbon {
 	return &carbon.Carbon{}
-}
-
-func TableHash(key string, count float64) uint32 {
-	k := crc32.ChecksumIEEE([]byte(key))
-	return uint32(math.Mod(float64(k), count))
 }
