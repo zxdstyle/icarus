@@ -6,6 +6,7 @@ import (
 	"github.com/gookit/goutil/strutil"
 	"github.com/iancoleman/strcase"
 	"github.com/spf13/cast"
+	"github.com/zxdstyle/icarus/base/filter"
 	"github.com/zxdstyle/icarus/server/requests"
 	"github.com/zxdstyle/icarus/server/responses"
 	"gorm.io/gorm"
@@ -69,7 +70,10 @@ func (g GormRepository[M, F, O]) List(ctx context.Context, req requests.Request,
 		return err
 	}
 
-	tx := g.Orm.WithContext(ctx).Where(query.Where)
+	tx := g.Orm.WithContext(ctx)
+
+	tx = g.doFilter(tx, query.Where)
+
 	tx, err := query.Paginate(tx)
 	if err != nil {
 		return err
@@ -137,6 +141,26 @@ func (g GormRepository[M, F, O]) doSorter(tx *gorm.DB, sorter O) *gorm.DB {
 			continue
 		}
 		tx = tx.Order(fmt.Sprintf("`%s` %s", name, val))
+	}
+	return tx
+}
+
+func (g GormRepository[M, F, O]) doFilter(tx *gorm.DB, where F) *gorm.DB {
+	t := reflect.TypeOf(where)
+	v := reflect.ValueOf(where)
+	for i := 0; i < t.NumField(); i++ {
+		fieldName := t.Field(i).Tag.Get("query")
+		if len(fieldName) == 0 {
+			fieldName = t.Field(i).Tag.Get("json")
+		}
+		if len(fieldName) == 0 {
+			fieldName = strutil.SnakeCase(t.Field(i).Name)
+		}
+		fl, ok := v.Field(i).Interface().(filter.Filter)
+		if !ok {
+			continue
+		}
+		tx = fl.Filter(tx, fieldName)
 	}
 	return tx
 }
