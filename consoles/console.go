@@ -6,5 +6,5 @@ type Console interface {
 	// Description The consoles command description.
 	Description() string
 	// Handle Execute the consoles command.
-	Handle() error
+	Handle(args ...string) error
 }

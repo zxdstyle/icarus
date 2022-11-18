@@ -18,7 +18,7 @@ func (p HttpProvider) Description() string {
 	return "Start http server"
 }
 
-func (p HttpProvider) Handle() error {
+func (p HttpProvider) Handle(args ...string) error {
 	go icarus.Server().Run()
 
 	sc := make(chan os.Signal, 1)

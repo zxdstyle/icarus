@@ -20,7 +20,7 @@ func (s SchedulerProvider) Description() string {
 	return "Start the schedule worker"
 }
 
-func (s SchedulerProvider) Handle() error {
+func (s SchedulerProvider) Handle(args ...string) error {
 	s.scheduler.Run()
 	return nil
 }
