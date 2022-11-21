@@ -1,6 +1,7 @@
 package guard
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
@@ -68,6 +69,6 @@ func (j jwtGuard) LoginUsingID(id uint) (any, error) {
 	return token.SignedString(j.secret)
 }
 
-func (j jwtGuard) ID(req requests.Request) uint {
-	return cast.ToUint(req.Value(jwtGuardContextKey))
+func (j jwtGuard) ID(ctx context.Context) uint {
+	return cast.ToUint(ctx.Value(jwtGuardContextKey))
 }

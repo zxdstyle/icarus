@@ -59,7 +59,7 @@ func (a *Application) transferConsole(cmd consoles.Console) *cobra.Command {
 		Use:   cmd.Signature(),
 		Short: cmd.Description(),
 		Run: func(c *cobra.Command, args []string) {
-			if err := cmd.Handle(); err != nil {
+			if err := cmd.Handle(args...); err != nil {
 				log.Fatalln(err)
 			}
 		},
