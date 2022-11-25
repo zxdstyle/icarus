@@ -19,7 +19,7 @@ func NewHandler[V logicModel](l Logic[V]) Handler[V] {
 }
 
 func (h Handler[V]) List(ctx context.Context, req requests.Request) responses.Response {
-	var data []V
+	var data []*V
 	resp := responses.Success(&data)
 	if err := h.logic.List(ctx, req, resp); err != nil {
 		return responses.Error(err)
@@ -59,5 +59,8 @@ func (h Handler[V]) Update(ctx context.Context, req requests.Request) responses.
 }
 
 func (h Handler[V]) Destroy(ctx context.Context, req requests.Request) responses.Response {
-	panic("implement me")
+	if err := h.logic.Destroy(ctx, req.GetResourceID()); err != nil {
+		return responses.Error(err)
+	}
+	return responses.Empty()
 }

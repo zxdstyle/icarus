@@ -7,9 +7,11 @@ import (
 	"github.com/iancoleman/strcase"
 	"github.com/spf13/cast"
 	"github.com/zxdstyle/icarus/base/filter"
+	"github.com/zxdstyle/icarus/base/preloader"
 	"github.com/zxdstyle/icarus/server/requests"
 	"github.com/zxdstyle/icarus/server/responses"
 	"gorm.io/gorm"
+	"gorm.io/plugin/dbresolver"
 	"reflect"
 	"strings"
 )
@@ -31,7 +33,7 @@ var _ Repository[RepoModel] = GormRepository[RepoModel, any, any]{}
 type (
 	GormRepository[M any, F any, O any] struct {
 		Orm      *gorm.DB
-		preloads map[string]PreloadAble
+		preloads map[string]preloader.Preloader
 	}
 
 	RepoModel interface {
@@ -43,13 +45,13 @@ func NewGormRepository[M any, F any, O any](orm *gorm.DB) *GormRepository[M, F, 
 	var mo M
 	return &GormRepository[M, F, O]{
 		Orm:      orm.Model(mo),
-		preloads: make(map[string]PreloadAble),
+		preloads: make(map[string]preloader.Preloader),
 	}
 }
 
-func NewGormRepositoryWithPreload[M any, F any, O any](orm *gorm.DB, preloads ...PreloadAble) *GormRepository[M, F, O] {
+func NewGormRepositoryWithPreload[M any, F any, O any](orm *gorm.DB, preloads ...preloader.Preloader) *GormRepository[M, F, O] {
 	var mo M
-	ps := make(map[string]PreloadAble)
+	ps := make(map[string]preloader.Preloader)
 	for _, preload := range preloads {
 		ps[preload.Resource()] = preload
 	}
@@ -106,7 +108,11 @@ func (g GormRepository[M, F, O]) BatchCreate(ctx context.Context, mos *[]M) erro
 }
 
 func (g GormRepository[M, F, O]) Update(ctx context.Context, primaryKey uint, mo *M) error {
-	return g.Orm.WithContext(ctx).Where("`id` = ?", primaryKey).Updates(mo).Error
+	if err := g.Orm.WithContext(ctx).Where("`id` = ?", primaryKey).Updates(mo).Error; err != nil {
+		return err
+	}
+	// 修改完立马查询强制使用主节点，以防数据库主从延迟导致查询到修改之前的数据
+	return g.Orm.WithContext(ctx).Clauses(dbresolver.Write).First(mo, primaryKey).Error
 }
 
 func (g GormRepository[M, F, O]) Destroy(ctx context.Context, primaryKey uint) error {

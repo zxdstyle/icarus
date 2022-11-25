@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"github.com/zxdstyle/icarus/policies"
 	"github.com/zxdstyle/icarus/server/requests"
 	"github.com/zxdstyle/icarus/server/responses"
 )
@@ -48,4 +49,13 @@ func (b BaseLogic[V]) Update(ctx context.Context, primaryKey uint, mo *V) error 
 
 func (b BaseLogic[V]) Destroy(ctx context.Context, primaryKey uint) error {
 	return b.repo.Destroy(ctx, primaryKey)
+}
+
+func (b BaseLogic[V]) Authorize(ctx context.Context, pos ...policies.Policy) error {
+	for _, po := range pos {
+		if err := po.Authorize(ctx); err != nil {
+			return err
+		}
+	}
+	return nil
 }
