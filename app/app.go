@@ -34,7 +34,11 @@ func (a *Application) Run() error {
 	// 注册scheduler驱动
 	container.ProvideValue[schedulers.Scheduler](providers, schedulers.NewCron())
 
-	a.RegisterConsole(consoles.HttpProvider{}, consoles.NewSchedulerProvider(Make[schedulers.Scheduler]()))
+	a.RegisterConsole(
+		consoles.HttpProvider{},
+		consoles.NewSchedulerProvider(Make[schedulers.Scheduler]()),
+		consoles.NewMigrateProvider(a.kernel.Models),
+	)
 
 	if a.kernel.Boot != nil {
 		a.kernel.Boot(providers)
