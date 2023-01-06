@@ -16,12 +16,6 @@ type RepositoryModel interface {
 	GetUpdatedAt() carbon.Carbon
 }
 
-type RepositoryModels interface {
-	GetRepositoryModel(i int) RepositoryModel
-	SetRepositoryModel(i int, model RepositoryModel) error
-	Length() int
-}
-
 type Model struct {
 	ID        uint             `gorm:"primary_key" json:"id,omitempty"`
 	CreatedAt *carbon.DateTime `gorm:"index;not null" json:"created_at,omitempty"`

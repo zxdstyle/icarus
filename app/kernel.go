@@ -11,4 +11,5 @@ type Kernel struct {
 	Boot     func(injector *do.Injector)
 	Consoles []consoles.Console
 	Schedule func(scheduler schedulers.Scheduler)
+	Models   []any
 }
